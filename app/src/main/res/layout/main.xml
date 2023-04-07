@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:textSize="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <AutoCompleteTextView
+            android:id="@+id/edit_ip"
+            android:layout_width="334dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:focusable='false'
+            android:cursorVisible='false'
+            android:text="default value" />
+        <Spinner
+            android:layout_marginRight="20dp"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:id="@+id/spinner_ip"
+            android:spinnerMode="dropdown"
+            android:entries="@array/labelArray"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:textSize="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/recognize_file"
+            android:layout_weight="0.33"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:text="@string/recognize_file"/>
+
+        <Button
+            android:id="@+id/recognize_mic"
+            android:layout_weight="0.33"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:text="@string/recognize_microphone"/>
+
+        <ToggleButton
+            android:id="@+id/pause"
+            android:layout_weight="0.33"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:textOff="@string/pause"
+            android:textOn="@string/continueRecognition"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/result_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@+id/result_text_partial"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:minHeight="100dp"
+            android:background="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            android:layout_marginBottom="105dp"
+            android:scrollbarSize="4dp"
+            android:scrollbars="vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/result_text_partial"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/holo_blue_bright"
+            android:textSize="12dp"
+            android:gravity="bottom"
+            android:scaleType="fitEnd"
+            android:scrollbars="vertical"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+    </RelativeLayout>
+</LinearLayout>

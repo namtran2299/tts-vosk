@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">STT</string>
+    <string name="recognize_file">Recognize File</string>
+    <string name="recognize_microphone">Recognize Microphone</string>
+    <string name="stop_microphone">Stop Microphone</string>
+    <string name="preparing">Preparing the recognizer\n</string>
+    <string name="ready">Ready\n</string>
+    <string name="failed">Failed to init recognizer %s\n</string>
+    <string name="starting">Starting\n</string>
+    <string name="say_something">Say something\n</string>
+    <string name="stop_file">Stop File</string>
+    <string name="pause">Pause</string>
+    <string name="continueRecognition">Continue</string>
+
+    <string-array name="descriptionArray">
+        <item></item>
+<!--        <item>5.69 (librispeech test-clean) 6.05 (tedlium) 29.78(callcenter)</item>-->
+        <item>7.82 (librispeech) 8.20 (tedlium)</item>
+        <item>9.85 (librispeech test-clean) 10.38 (tedlium)</item>
+    </string-array>
+    <string-array name="labelArray">
+        <item>Choose</item>
+<!--        <item>English-1.8G (5.69 ER)</item>-->
+        <item>English-128M (7.82)</item>
+        <item>English-40 (9.85 ER)</item>
+    </string-array>
+    <string-array name="linkArray">
+        <item></item>
+<!--        <item>https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip</item>-->
+        <item>https://alphacephei.com/vosk/models/vosk-model-en-us-0.22-lgraph.zip</item>
+        <item>https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip</item>
+    </string-array>
+</resources>

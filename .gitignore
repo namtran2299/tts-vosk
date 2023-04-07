@@ -1,0 +1,14 @@
+.gradle
+.idea
+/local.properties
+/build
+/app/build
+/models/build
+.DS_Store
+*.md5
+*.lst
+*.iml
+.git
+gradle
+/models/src/main/assets
+/app/build
