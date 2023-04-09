@@ -63,8 +63,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -268,12 +271,14 @@ public class VoskActivity extends Activity implements
         if (hypothesis.isEmpty()) {
             if (resultViewPartial.length() > 0) {
                 counter++;
-                resultView.append(counter+"."+resultViewPartial.getText().toString() + "\n\n");
+                String txt = resultViewPartial.getText().toString();
+                resultView.append(counter+"."+ txt + "\n\n");
+                translate(txt, resultView.getText().length());
             }
         } else {
-            resultViewPartial.setText(hypothesis);
         }
-//        previousSent = hypothesis;
+        resultViewPartial.setText(hypothesis);
+        previousSent = hypothesis;
     }
 
     @Override
@@ -283,12 +288,14 @@ public class VoskActivity extends Activity implements
         if (hypothesis.isEmpty()) {
             if (resultViewPartial.length() > 0) {
                 counter++;
-                resultView.append(counter+"."+resultViewPartial.getText().toString() + "\n\n");
+                String txt = resultViewPartial.getText().toString();
+                resultView.append(counter+"."+ txt + "\n\n");
+                translate(txt, resultView.getText().length());
             }
         } else {
-            resultViewPartial.setText(hypothesis);
         }
-//        previousSent = hypothesis;
+        resultViewPartial.setText(hypothesis);
+        previousSent = hypothesis;
         setUiState(STATE_DONE);
         if (speechStreamService != null) {
             speechStreamService = null;
@@ -302,12 +309,14 @@ public class VoskActivity extends Activity implements
         if (hypothesis.isEmpty()) {
             if (resultViewPartial.length() > 0) {
                 counter++;
-                resultView.append(counter+"."+resultViewPartial.getText().toString() + "\n\n");
+                String txt = resultViewPartial.getText().toString();
+                resultView.append(counter+"."+ txt + "\n\n");
+                translate(txt, resultView.getText().length());
             }
         } else {
-            resultViewPartial.setText(hypothesis);
         }
-//        previousSent = hypothesis;
+        resultViewPartial.setText(hypothesis);
+        previousSent = hypothesis;
     }
 
     private String getSent(String hypothesis) {
@@ -342,7 +351,7 @@ public class VoskActivity extends Activity implements
                 break;
             case STATE_READY:
                 resultView.setText("");
-                resultViewPartial.setText(R.string.ready);
+                resultViewPartial.setText("");
                 ((Button) findViewById(R.id.recognize_mic)).setText(R.string.recognize_microphone);
                 findViewById(R.id.recognize_file).setEnabled(true);
                 findViewById(R.id.recognize_mic).setEnabled(true);
@@ -359,7 +368,7 @@ public class VoskActivity extends Activity implements
             case STATE_FILE:
                 ((Button) findViewById(R.id.recognize_file)).setText(R.string.stop_file);
                 resultView.setText("");
-                resultViewPartial.setText(getString(R.string.starting));
+                resultViewPartial.setText("");
                 findViewById(R.id.recognize_mic).setEnabled(false);
                 findViewById(R.id.recognize_file).setEnabled(true);
                 findViewById(R.id.pause).setEnabled((false));
@@ -367,7 +376,7 @@ public class VoskActivity extends Activity implements
             case STATE_MIC:
                 ((Button) findViewById(R.id.recognize_mic)).setText(R.string.stop_microphone);
                 resultView.setText("");
-                resultViewPartial.setText(getString(R.string.say_something));
+                resultViewPartial.setText("");
                 findViewById(R.id.recognize_file).setEnabled(false);
                 findViewById(R.id.recognize_mic).setEnabled(true);
                 findViewById(R.id.pause).setEnabled((true));
@@ -458,6 +467,11 @@ public class VoskActivity extends Activity implements
                 URL url = new URL(aurl[0]);
                 URLConnection conexion = url.openConnection();
                 conexion.connect();
+//                if(conexion.get() != HttpsURLConnection.HTTP_OK){
+//                    result = "false";
+//                    return result;
+//                }
+
                 int lenghtOfFile = conexion.getContentLength();
                 InputStream input = new BufferedInputStream(url.openStream());
 
@@ -650,25 +664,54 @@ public class VoskActivity extends Activity implements
         String baseContentDir = externalFilesDir.getAbsolutePath() + "/contents/";
         new File(baseContentDir).mkdirs();
         String fileName = DateFormat.format("yyyy-MM-dd_hh_mm_ss", new java.util.Date()).toString();
-        writeToFile(data, baseContentDir + fileName + ".txt", this);
+        writeToFile2(data, baseContentDir + fileName + ".txt", this);
     }
 
     private void writeToFile(String data, String pathName, Context context) {
-//        File uuidFile = new File( pathName);
-//        try {
-//            FileOutputStream stream = new FileOutputStream(uuidFile);
-//            stream.write(data.getBytes());
-//            stream.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } finally {
-//        }
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(pathName));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
+    }
+    private void writeToFile2(String data, String pathName, Context context) {
+        try {
+            File uuidFile = new File( pathName+".gz");
+            GZIPOutputStream stream = new GZIPOutputStream(new FileOutputStream(uuidFile));
+            stream.write(data.getBytes());
+            stream.close();
+        } catch (Exception e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        } finally {
+        }
+    }
+
+    public void translate(String enText, int start){
+        translate_api translate=new translate_api();
+        translate.setOnTranslationCompleteListener(new translate_api.OnTranslationCompleteListener() {
+            @Override
+            public void onStartTranslation() {
+                // here you can perform initial work before translated the text like displaying progress bar
+            }
+
+            @Override
+            public void onCompleted(String text) {
+                // "text" variable will give you the translated text
+                try{
+                    if(text.isEmpty()) return;
+                    resultView.getEditableText().insert(start, text+"\n\n");
+                }catch (Exception ex){
+                    Log.e("TAG", "translate: ", ex);
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        translate.execute(enText,"en","vi");
     }
 }

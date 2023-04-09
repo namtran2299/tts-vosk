@@ -90,7 +90,7 @@
             android:layout_centerHorizontal="true"
             android:background="@android:color/holo_blue_bright"
             android:textSize="12dp"
-            android:gravity="bottom"
+            android:gravity="top"
             android:scaleType="fitEnd"
             android:scrollbars="vertical"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
